@@ -2,15 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisualizationManager : MonoBehaviour
+public class IslandManager : MonoBehaviour
 {
-    JsonReader jsonReader = new JsonReader();
-
+    public GameObject islandPrefab;
     // Start is called before the first frame update
     void Start()
     {
-
-        jsonReader.LoadData("aswi2017vana");
         
     }
 

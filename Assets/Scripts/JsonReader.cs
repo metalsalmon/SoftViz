@@ -153,7 +153,7 @@ public class JsonReader
                     commits.Add(new Commit(vertex["id"], vertex["attributes"]["1"], vertex["attributes"]["4"], vertex["attributes"]["8"][0], ParseDate(vertex["attributes"]["26"]), vertex["attributes"]["27"], ToStringArray(vertex["attributes"]["28"].AsArray)));
                     break;
             }
-        }        
+        }      
     }
 
     public static string[] ToStringArray(JSONArray arrayJson)
