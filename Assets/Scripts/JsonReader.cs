@@ -125,10 +125,12 @@ public class JsonReader
     public List<Change> changes = new List<Change>();
     public List<File> files = new List<File>();
     public List<Ticket> tickets = new List<Ticket>();
+    public List<string> dates = new List<string>();
+
 
     public void LoadData(string datasetName)
     {
-        TextAsset asset = Resources.Load(datasetName) as TextAsset;
+        TextAsset asset = Resources.Load("data/"+datasetName) as TextAsset;
         var data = JSON.Parse(asset.text);
 
         foreach (var vertex in data["vertices"].Values)
@@ -153,7 +155,8 @@ public class JsonReader
                     commits.Add(new Commit(vertex["id"], vertex["attributes"]["1"], vertex["attributes"]["4"], vertex["attributes"]["8"][0], ParseDate(vertex["attributes"]["26"]), vertex["attributes"]["27"], ToStringArray(vertex["attributes"]["28"].AsArray)));
                     break;
             }
-        }      
+        }
+        GetDates();
     }
 
     public static string[] ToStringArray(JSONArray arrayJson)
@@ -172,11 +175,27 @@ public class JsonReader
     {
         if (!string.IsNullOrWhiteSpace(date))
         {
-            return DateTime.Parse(date);
+            return DateTime.Parse(date).Date;
         }
         else
         {
             return null;
+        }
+    }
+
+    public void GetDates()
+    {
+       List<DateTime> dateList = new List<DateTime>();
+
+        foreach (var commit in commits)
+        {
+            dateList.Add(commit.created.Value.Date);
+        }
+        dateList.Sort();
+
+        foreach (var item in dateList)
+        {
+        dates.Add(item.ToString("dd.MM.yyyy"));
         }
     }
 }

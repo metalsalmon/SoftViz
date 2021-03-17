@@ -5,15 +5,22 @@ using UnityEngine;
 public class IslandManager : MonoBehaviour
 {
     public GameObject islandPrefab;
-    // Start is called before the first frame update
-    void Start()
+    
+    float x = 0;
+    float y = 0;
+    float z = 0;
+
+    public void CreateIslands(int count, List<string> dates)
     {
-        
+        islandPrefab = (GameObject)Resources.Load("Prefabs/IslandPrefab", typeof(GameObject));
+
+        float x_pos=0;
+        foreach (var date in dates)
+        {
+            var platform = Instantiate(islandPrefab, new Vector3(x_pos, z, y), Quaternion.identity);
+
+            x_pos += 15;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
