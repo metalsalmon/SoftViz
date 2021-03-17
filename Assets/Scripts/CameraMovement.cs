@@ -8,22 +8,22 @@ public class CameraMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     float inputX, inputZ;
     void Update()
     {
-        inputX = Input.GetAxis("Horizontal");
-
-        if(inputX != 0)
+        if (Input.GetKeyDown(KeyCode.D))
         {
-            move();
+            transform.position = new Vector3(transform.position.x + 12, transform.position.y, transform.position.z);
         }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            transform.position = new Vector3(transform.position.x - 12, transform.position.y, transform.position.z);
+        }
+
     }
 
-    private void move()
-    {
-        transform.position += transform.right * inputX * 5 ;
-    }
 }
