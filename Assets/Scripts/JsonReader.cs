@@ -192,6 +192,7 @@ public class JsonReader
             dateList.Add(commit.created.Value.Date);
         }
         dateList.Sort();
+        dateList = dateList.Distinct().ToList();
 
         foreach (var item in dateList)
         {
