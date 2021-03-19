@@ -11,12 +11,22 @@ public class Author
     public string name;
     public List<string> roles;
     public List<string> emails;
+    public List<Commit> commits;
+    public List<Change> changes;
+    public List<File> files;
+    public List<Ticket> tickets;
+    public List<(string action, string file, string date)> commitedFiles;
     public Author(int id, string name, string[] roles , string[] emails)
     {
         this.id = id;
         this.name = name;
         this.roles = new List<string>(roles);
         this.emails = new List<string>(emails);
+        commits = new List<Commit>();
+        commitedFiles = new List<(string, string, string)>();
+        changes = new List<Change>();
+        files = new List<File>();
+        tickets = new List<Ticket>();
     }
 }
 
@@ -156,7 +166,9 @@ public class JsonReader
                     break;
             }
         }
+        
         GetDates();
+        AddAuthorsContribution();
     }
 
     public static string[] ToStringArray(JSONArray arrayJson)
@@ -198,5 +210,36 @@ public class JsonReader
         {
         dates.Add(item.ToString("dd.MM.yyyy"));
         }
+    }
+
+    public void AddAuthorsContribution()
+    {
+        foreach (var author in authors)
+        {
+            author.commits = commits.Where(commit => commit.author == author.name).ToList();
+            author.changes = changes.Where(change => change.author == author.name).ToList();
+            author.files = files.Where(file => file.author == author.name).ToList();
+            author.tickets = tickets.Where(ticket => ticket.assignee == author.name).ToList();
+            author.commitedFiles = parseCommitedFiles(author, author.commits);
+        }
+    }
+
+    public List<(string, string, string)> parseCommitedFiles(Author author, List<Commit> commits)
+    {
+        foreach (var commit in commits)
+        {
+            string[] values = commit.changes.Split('\n');
+
+            foreach (var value in values)
+            {
+                if (value != "")
+                {
+                    string[] file = value.Split(' ');
+                    author.commitedFiles.Add((file[0], file[1], commit.created.Value.ToString("dd.MM.yyyy")));
+
+                }
+            }
+        }
+        return author.commitedFiles;
     }
 }

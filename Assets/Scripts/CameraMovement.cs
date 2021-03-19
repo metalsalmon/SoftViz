@@ -16,12 +16,22 @@ public class CameraMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.D))
         {
-            transform.position = new Vector3(transform.position.x + 12, transform.position.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x + 17, transform.position.y, transform.position.z);
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            transform.position = new Vector3(transform.position.x - 12, transform.position.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x - 17, transform.position.y, transform.position.z);
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 20);
+        }
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z-20);
         }
 
     }

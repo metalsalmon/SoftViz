@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class VisualizationManager : MonoBehaviour
 {
     JsonReader jsonReader = new JsonReader();
-    IslandManager islandManager = new IslandManager();
+    BuildManager buildManager = new BuildManager();
+    List<Building> buildings = new List<Building>();
 
     // Start is called before the first frame update
     void Start()
@@ -13,10 +15,10 @@ public class VisualizationManager : MonoBehaviour
 
         jsonReader.LoadData("aswi2017vana");
 
-        islandManager.CreateIslands(jsonReader.dates.Count, jsonReader.dates);
+        buildManager.CreateIslands(jsonReader.dates);
 
-
-        
+        buildManager.CreateBuildings(jsonReader.authors, jsonReader.dates);
+        buildManager.RenderBuildings();  
     }
 
     // Update is called once per frame
@@ -24,4 +26,6 @@ public class VisualizationManager : MonoBehaviour
     {
        
     }
+
+
 }
