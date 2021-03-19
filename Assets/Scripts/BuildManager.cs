@@ -71,12 +71,16 @@ public class BuildManager : MonoBehaviour
                     changesInstance = Instantiate(changesPrefab, buildingInstance.transform, false);
                     changesInstance.transform.localPosition = new Vector3(changesInstance.transform.localPosition.x, personSizeY + (commitInstance != null ? commitInstance.transform.localScale.y :0), changesInstance.transform.localPosition.z);
                     changesInstance.transform.localScale = new Vector3(changesInstance.transform.localScale.x, building.changes.Count/8f, changesInstance.transform.localScale.z);
+                    var changesManager = changesInstance.transform.GetChild(0).GetComponent<ChangesManager>();
+                    changesManager.SetBuilding(building);
                 }
                 if(building.commitedFiles.Count != 0)
                 {
                     filesInstance = Instantiate(filesPrefab, buildingInstance.transform, false);
                     filesInstance.transform.localPosition = new Vector3(filesInstance.transform.localPosition.x, personSizeY + (commitInstance != null ? commitInstance.transform.localScale.y : 0)  + (changesInstance != null ? changesInstance.transform.localScale.y : 0), filesInstance.transform.localPosition.z);
                     filesInstance.transform.localScale = new Vector3(filesInstance.transform.localScale.x, building.commitedFiles.Count/20f, filesInstance.transform.localScale.z);
+                    var filesManager = filesInstance.transform.GetChild(0).GetComponent<CommitedFilesManager>();
+                    filesManager.SetBuilding(building);
                 }
             }
 
