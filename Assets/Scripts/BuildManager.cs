@@ -10,8 +10,15 @@ public class BuildManager : MonoBehaviour
     public GameObject commitsPrefab;
     public GameObject filesPrefab;
     public GameObject changesPrefab;
+    public GameObject powerlinePrefab;
     public List<(GameObject gameObject, string date)> islands = new List<(GameObject, string)>();
     public List<Building> buildings = new List<Building>();
+    public List<PowerLine> powerLines = new List<PowerLine>();
+
+
+
+    
+
 
     public void CreateIslands(List<string> dates)
     {
@@ -51,7 +58,7 @@ public class BuildManager : MonoBehaviour
                 GameObject commitInstance = null;
 
                 buildingPrefab.transform.position = new Vector3(IslandMinX, 0, 0);
-
+                
                 IslandMinX += buildingPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.x + 0.2f;
                 var buildingInstance = Instantiate(buildingPrefab, island.gameObject.transform, false);
                 buildingInstance.transform.localPosition = new Vector3(buildingInstance.transform.localPosition.x, buildingInstance.transform.localPosition.y, IslandMinZ + building.tickets.Count);
@@ -97,6 +104,47 @@ public class BuildManager : MonoBehaviour
             }
         }
     }
+    
+    
+    public void CreatePowerLines(List<Ticket> tickets)
+    {
+        foreach (var ticket in tickets)
+        {
+            powerLines.Add(new PowerLine(ticket));
+        }
+    }
 
+
+    public void RenderPowerLines()
+    {
+        var lastIsland = islands[islands.Count - 1];
+
+        float x_end = lastIsland.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.max.x;
+        float y_line = 0;
+        powerlinePrefab = (GameObject)Resources.Load("Prefabs/PowerLinePrefab", typeof(GameObject));
+
+
+
+        foreach (var island in islands)
+        {
+
+            float x_start = island.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.min.x;
+            if (y_line == 0)
+                y_line = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.max.y + 3;
+            float z_start = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.max.z + 1;
+
+            foreach (var powerline in powerLines.Where(powerline => powerline.show && powerline.ticket.created.Value.ToString("dd.MM.yyyy") == island.date))
+            {
+
+                powerlinePrefab.transform.position = new Vector3(x_start, y_line, z_start);
+                var lineRenderer = powerlinePrefab.transform.GetChild(0).GetComponent<LineRenderer>();
+                lineRenderer.SetPosition(0, new Vector3(x_start, y_line, z_start));
+                lineRenderer.SetPosition(1, new Vector3(x_end, y_line, z_start));
+
+                var powerLineInstance = Instantiate(powerlinePrefab);
+                y_line += 0.2f;
+            }
+        }
+    }
 
 }

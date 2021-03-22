@@ -26,12 +26,12 @@ public class CameraMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 20);
+            transform.position = new Vector3(transform.position.x, transform.position.y - 5, transform.position.z + 20);
         }
 
         if (Input.GetKeyDown(KeyCode.S))
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z-20);
+            transform.position = new Vector3(transform.position.x, transform.position.y + 5, transform.position.z-20);
         }
 
     }

@@ -18,7 +18,10 @@ public class VisualizationManager : MonoBehaviour
         buildManager.CreateIslands(jsonReader.dates);
 
         buildManager.CreateBuildings(jsonReader.authors, jsonReader.dates);
-        buildManager.RenderBuildings();  
+        buildManager.RenderBuildings();
+
+        buildManager.CreatePowerLines(jsonReader.tickets);
+        buildManager.RenderPowerLines();
     }
 
     // Update is called once per frame
