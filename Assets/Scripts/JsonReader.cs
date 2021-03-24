@@ -228,15 +228,18 @@ public class JsonReader
     {
         foreach (var commit in commits)
         {
-            string[] values = commit.changes.Split('\n');
-
-            foreach (var value in values)
+            if (commit.changes != null)
             {
-                if (value != "")
-                {
-                    string[] file = value.Split(' ');
-                    author.commitedFiles.Add((file[0], file[1], commit.created.Value.ToString("dd.MM.yyyy")));
+                string[] values = commit.changes.Split('\n');
 
+                foreach (var value in values)
+                {
+                    if (value != "")
+                    {
+                        string[] file = value.Split(' ');
+                        author.commitedFiles.Add((file[0], file[1], commit.created.Value.ToString("dd.MM.yyyy")));
+
+                    }
                 }
             }
         }
