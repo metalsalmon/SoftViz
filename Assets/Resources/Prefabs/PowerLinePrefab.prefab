@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 6326076337030692160}
   m_Layer: 0
   m_Name: PowerLinePrefab
-  m_TagString: Untagged
+  m_TagString: PowerLine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
