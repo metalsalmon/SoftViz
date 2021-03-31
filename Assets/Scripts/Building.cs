@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,7 +6,8 @@ using UnityEngine;
 
 public class Building
 {
-    public string date;
+    public DateTime dateFrom;
+    public DateTime dateTo;
     public string name;
     public List<string> roles;
     public List<string> emails;
@@ -13,23 +15,26 @@ public class Building
     public List<Change> changes = new List<Change>();
     public List<File> files = new List<File>();
     public List<Ticket> tickets = new List<Ticket>();
-    public List<(string action, string file, string date)> commitedFiles = new List<(string, string, string)>();
+    public List<(string action, string file, DateTime date)> commitedFiles = new List<(string, string, DateTime)>();
     public bool show = true;
 
-    public Building(Author author, string date)
+    public Building(Author author, DateTime dateFrom, DateTime dateTo, bool showCommits, bool showChanges, bool showCommitedFiles)
     {
         this.name = author.name;
-        this.date = date;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
         this.roles = author.roles;
-        this.commits = author.commits.Where(commit => commit.created.Value.ToString("dd.MM.yyyy") == date).ToList();
-        this.changes = author.changes.Where(change => change.created.Value.ToString("dd.MM.yyyy") == date).ToList();
-        this.files = author.files.Where(files => files.created.Value.ToString("dd.MM.yyyy") == date).ToList();
-        this.tickets = author.tickets.Where(tickets => tickets.created.Value.ToString("dd.MM.yyyy") == date).ToList();
-        this.commitedFiles = author.commitedFiles.Where(file => file.date == date).ToList();
+        if (showCommits) this.commits = author.commits.Where(commit => commit.created.Value >= dateFrom && commit.created.Value <= dateTo).ToList();
+        if (showChanges) this.changes = author.changes.Where(change => change.created.Value >= dateFrom && change.created.Value <= dateTo).ToList();
+        //this.files = author.files.Where(files => files.created.Value >= dateFrom && files.created.Value <= dateTo).ToList();
+        this.tickets = author.tickets.Where(tickets => tickets.created.Value >= dateFrom && tickets.created.Value <= dateTo).ToList();
+        if(showCommitedFiles) this.commitedFiles = author.commitedFiles.Where(file => file.date >= dateFrom && file.date <= dateTo).ToList();
 
         if (commits.Count == 0 && changes.Count == 0 && files.Count == 0)
         {
             show = false;
         }
     }
+
+
 }

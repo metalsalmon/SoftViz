@@ -15,7 +15,7 @@ public class Author
     public List<Change> changes;
     public List<File> files;
     public List<Ticket> tickets;
-    public List<(string action, string file, string date)> commitedFiles;
+    public List<(string action, string file, DateTime date)> commitedFiles;
     public Author(int id, string name, string[] roles , string[] emails)
     {
         this.id = id;
@@ -23,7 +23,7 @@ public class Author
         this.roles = new List<string>(roles);
         this.emails = new List<string>(emails);
         commits = new List<Commit>();
-        commitedFiles = new List<(string, string, string)>();
+        commitedFiles = new List<(string, string, DateTime)>();
         changes = new List<Change>();
         files = new List<File>();
         tickets = new List<Ticket>();
@@ -136,6 +136,7 @@ public class JsonReader
     public List<File> files = new List<File>();
     public List<Ticket> tickets = new List<Ticket>();
     public List<string> dates = new List<string>();
+    public List<DateTime> allDates = new List<DateTime>();
 
 
     public void LoadData(string datasetName)
@@ -166,8 +167,8 @@ public class JsonReader
                     break;
             }
         }
-        
-        GetDates();
+
+        GetAllDates();
         AddAuthorsContribution();
     }
 
@@ -195,21 +196,31 @@ public class JsonReader
         }
     }
 
-    public void GetDates()
+    public void GetAllDates()
     {
-       List<DateTime> dateList = new List<DateTime>();
+        List<DateTime> dateList = new List<DateTime>();
 
         foreach (var commit in commits)
         {
             dateList.Add(commit.created.Value.Date);
         }
+        foreach (var change in changes)
+        {
+            dateList.Add(change.created.Value.Date);
+        }
+        //foreach (var file in files)
+        //{
+        //    dateList.Add(file.created.Value.Date);
+        //}
+        foreach (var ticket in tickets)
+        {
+            dateList.Add(ticket.created.Value.Date);
+        }
+
         dateList.Sort();
         dateList = dateList.Distinct().ToList();
 
-        foreach (var item in dateList)
-        {
-        dates.Add(item.ToString("dd.MM.yyyy"));
-        }
+        allDates = dateList;
     }
 
     public void AddAuthorsContribution()
@@ -224,7 +235,7 @@ public class JsonReader
         }
     }
 
-    public List<(string, string, string)> parseCommitedFiles(Author author, List<Commit> commits)
+    public List<(string, string, DateTime)> parseCommitedFiles(Author author, List<Commit> commits)
     {
         foreach (var commit in commits)
         {
@@ -237,7 +248,7 @@ public class JsonReader
                     if (value != "")
                     {
                         string[] file = value.Split(' ');
-                        author.commitedFiles.Add((file[0], file[1], commit.created.Value.ToString("dd.MM.yyyy")));
+                        author.commitedFiles.Add((file[0], file[1], commit.created.Value));
 
                     }
                 }
