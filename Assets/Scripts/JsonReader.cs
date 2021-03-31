@@ -136,6 +136,7 @@ public class JsonReader
     public List<File> files = new List<File>();
     public List<Ticket> tickets = new List<Ticket>();
     public List<string> dates = new List<string>();
+    public List<DateTime> allDates = new List<DateTime>();
 
 
     public void LoadData(string datasetName)
@@ -166,8 +167,8 @@ public class JsonReader
                     break;
             }
         }
-        
-        GetDates();
+
+        GetAllDates();
         AddAuthorsContribution();
     }
 
@@ -195,21 +196,31 @@ public class JsonReader
         }
     }
 
-    public void GetDates()
+    public void GetAllDates()
     {
-       List<DateTime> dateList = new List<DateTime>();
+        List<DateTime> dateList = new List<DateTime>();
 
         foreach (var commit in commits)
         {
             dateList.Add(commit.created.Value.Date);
         }
+        foreach (var change in changes)
+        {
+            dateList.Add(change.created.Value.Date);
+        }
+        foreach (var file in files)
+        {
+            dateList.Add(file.created.Value.Date);
+        }
+        foreach (var ticket in tickets)
+        {
+            dateList.Add(ticket.created.Value.Date);
+        }
+
         dateList.Sort();
         dateList = dateList.Distinct().ToList();
 
-        foreach (var item in dateList)
-        {
-        dates.Add(item.ToString("dd.MM.yyyy"));
-        }
+        allDates = dateList;
     }
 
     public void AddAuthorsContribution()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,31 +12,43 @@ public class BuildManager : MonoBehaviour
     public GameObject filesPrefab;
     public GameObject changesPrefab;
     public GameObject powerlinePrefab;
-    public List<(GameObject gameObject, string date)> islands = new List<(GameObject, string)>();
     public List<Building> buildings = new List<Building>();
     public List<PowerLine> powerLines = new List<PowerLine>();
+    public List<Island> islands = new List<Island>();
 
 
 
     
 
 
-    public void CreateIslands(List<string> dates)
+    public void CreateIslands(List<DateTime> dates, int range)
     {
+        islandPrefab = (GameObject)Resources.Load("Prefabs/IslandPrefab", typeof(GameObject));
+        int count = 0;
+        float gap = 2;
+        float x = 0;
         float y = 0;
         float z = 0;
-        float gap = 2;
-        islandPrefab = (GameObject)Resources.Load("Prefabs/IslandPrefab", typeof(GameObject));
+        DateTime dateTo = DateTime.MinValue;
 
-        float x_pos=0;
+
         foreach (var date in dates)
         {
-            var island = Instantiate(islandPrefab, new Vector3(x_pos, z, y), Quaternion.identity);
-            islands.Add((island, date));
-            island.transform.GetChild(1).GetComponent<TextMesh>().text = date;
             
-            x_pos += islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.x + gap;
+            if (date > dateTo)
+            {
+                dateTo = date.AddDays(range - 1);
+                var island = Instantiate(islandPrefab, new Vector3(x, z, y), Quaternion.identity);
+                island.transform.GetChild(1).GetComponent<TextMesh>().text = "from: " + date.ToString("dd.MM.yyyy") + " to: " + dateTo.ToString("dd.MM.yyyy");
+                islands.Add(new Island(island, date, date.AddDays(range - 1)));
+                x += islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.x + gap;
+            }
+            else
+            {
+                islands.Last().AddDate(date);
+            }
         }
+
     }
 
     public void RenderBuildings()
@@ -51,7 +64,7 @@ public class BuildManager : MonoBehaviour
             float IslandMinX = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.min.x + 1;
             float IslandMinZ = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.min.z + 3;
 
-            foreach (var building in buildings.Where(building => building.show && building.date == island.date))
+            foreach (var building in buildings.Where(building => building.show && building.date >= island.DateFrom && building.date <= island.DateTo))
             {
                 GameObject filesInstance = null;
                 GameObject changesInstance = null;
@@ -60,7 +73,7 @@ public class BuildManager : MonoBehaviour
                 buildingPrefab.transform.position = new Vector3(IslandMinX, 0, 0);
                 
                 IslandMinX += buildingPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.x + 0.2f;
-                var buildingInstance = Instantiate(buildingPrefab, island.gameObject.transform, false);
+                var buildingInstance = Instantiate(buildingPrefab, island.islandInstance.gameObject.transform, false);
                 buildingInstance.transform.localPosition = new Vector3(buildingInstance.transform.localPosition.x, buildingInstance.transform.localPosition.y, IslandMinZ + building.tickets.Count);
 
 
@@ -94,7 +107,7 @@ public class BuildManager : MonoBehaviour
         }
     }
 
-    public void CreateBuildings(List<Author> authors, List<string> dates)
+    public void CreateBuildings(List<Author> authors, List<DateTime> dates)
     {
         foreach (var date in dates)
         {
@@ -114,7 +127,7 @@ public class BuildManager : MonoBehaviour
         }
     }
 
-
+/*
     public void RenderPowerLines()
     {
         var lastIsland = islands[islands.Count - 1];
@@ -146,5 +159,5 @@ public class BuildManager : MonoBehaviour
             }
         }
     }
-
+*/
 }
