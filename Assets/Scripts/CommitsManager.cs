@@ -22,6 +22,7 @@ public class CommitsManager : MonoBehaviour
     {
         foreach(var commit in building.commits)
             Debug.Log(commit.message + "   :::  " + commit.created);
+
     }
 
     public void SetBuilding(Building building)

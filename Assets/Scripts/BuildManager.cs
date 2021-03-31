@@ -38,7 +38,7 @@ public class BuildManager : MonoBehaviour
             if (showAll)
             {
                 var islandInstance = Instantiate(islandPrefab, new Vector3(x, z, y), Quaternion.identity);
-                islandInstance.transform.GetChild(1).GetComponent<TextMesh>().text = "from: " + island.DateFrom.Value.ToString("dd.MM.yyyy") + " to: " + island.DateTo.Value.ToString("dd.MM.yyyy");
+                islandInstance.transform.GetChild(1).GetComponent<TextMesh>().text = island.DateFrom.Value.ToString("dd.MM.yyyy") + " - " + island.DateTo.Value.ToString("dd.MM.yyyy");
                 island.islandInstance = islandInstance;
                 x += islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.x + gap;
             }
@@ -53,7 +53,7 @@ public class BuildManager : MonoBehaviour
                         if (!showAll)
                         {
                             var islandInstance = Instantiate(islandPrefab, new Vector3(x, z, y), Quaternion.identity);
-                            islandInstance.transform.GetChild(1).GetComponent<TextMesh>().text = "from: " + island.DateFrom.Value.ToString("dd.MM.yyyy") + " to: " + island.DateTo.Value.ToString("dd.MM.yyyy");
+                            islandInstance.transform.GetChild(1).GetComponent<TextMesh>().text = island.DateFrom.Value.ToString("dd.MM.yyyy") + " - " + island.DateTo.Value.ToString("dd.MM.yyyy");
                             island.islandInstance = islandInstance;
                             x += islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.x + gap;
                         }
