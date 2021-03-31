@@ -15,9 +15,11 @@ public class BuildManager : MonoBehaviour
     public List<Building> buildings = new List<Building>();
     public List<PowerLine> powerLines = new List<PowerLine>();
     public List<Island> islands = new List<Island>();
+    public bool showAll;
 
     public void CreateIslands(List<DateTime> dates, int range, bool showAll)
     {
+        this.showAll = showAll;
         islandPrefab = (GameObject)Resources.Load("Prefabs/IslandPrefab", typeof(GameObject));
         DateTime dateTo = DateTime.MinValue;
         float gap = 2;
@@ -27,7 +29,7 @@ public class BuildManager : MonoBehaviour
         DateTime StartDate = dates[0];
         bool AddIsland;
 
-        while(StartDate < dates.Last())
+        while(StartDate <= dates.Last())
         {
             islands.Add(new Island(StartDate, StartDate.AddDays(range - 1)));
             StartDate = StartDate.AddDays(range);
@@ -150,15 +152,16 @@ public class BuildManager : MonoBehaviour
 
     public void RenderPowerLines()
     {
-        var lastIsland = islands[islands.Count - 1];
+        var lastIsland = islands.Where(island => island.show).Last();
 
-        float x_end = lastIsland.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.max.x;
+        float x_end;
         float y_line = 0;
         powerlinePrefab = (GameObject)Resources.Load("Prefabs/PowerLinePrefab", typeof(GameObject));
 
         foreach (var island in islands)
         {
-
+            if (!showAll && !island.show)
+                continue;
             float x_start = island.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.min.x;
             if (y_line == 0)
                 y_line = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.max.y + 3;
@@ -171,8 +174,8 @@ public class BuildManager : MonoBehaviour
                 lineRenderer.SetPosition(0, new Vector3(x_start, y_line, z_start));
 
                 foreach (var islandItem in islands)
-                {
-                    if (powerline.ticket.due >= islandItem.DateFrom && powerline.ticket.due.Value <= islandItem.DateTo)
+                {      
+                    if ((powerline.ticket.due >= islandItem.DateFrom && powerline.ticket.due <= islandItem.DateTo) || powerline.ticket.due > lastIsland.DateTo)
                     {
                         x_end = islandItem.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.max.x;
                         lineRenderer.SetPosition(1, new Vector3(x_end, y_line, z_start));

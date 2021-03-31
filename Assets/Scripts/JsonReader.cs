@@ -204,18 +204,18 @@ public class JsonReader
         {
             dateList.Add(commit.created.Value.Date);
         }
-        //foreach (var change in changes)
-        //{
-        //    dateList.Add(change.created.Value.Date);
-        //}
+        foreach (var change in changes)
+        {
+            dateList.Add(change.created.Value.Date);
+        }
         //foreach (var file in files)
         //{
         //    dateList.Add(file.created.Value.Date);
         //}
-        //foreach (var ticket in tickets)
-        //{
-        //    dateList.Add(ticket.created.Value.Date);
-        //}
+        foreach (var ticket in tickets)
+        {
+            dateList.Add(ticket.created.Value.Date);
+        }
 
         dateList.Sort();
         dateList = dateList.Distinct().ToList();
