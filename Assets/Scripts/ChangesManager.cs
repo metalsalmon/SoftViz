@@ -19,7 +19,7 @@ public class ChangesManager : MonoBehaviour
     void OnMouseDown()
     {
         foreach (var change in building.changes)
-            Debug.Log(change.changes);
+            Debug.Log(change.changes + "   :::  " + change.created);
     }
 
     public void SetBuilding(Building building)

@@ -16,12 +16,12 @@ public class CameraMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.D))
         {
-            transform.position = new Vector3(transform.position.x + 17, transform.position.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x + 20, transform.position.y, transform.position.z);
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
-            transform.position = new Vector3(transform.position.x - 17, transform.position.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x - 20, transform.position.y, transform.position.z);
         }
 
         if (Input.GetKeyDown(KeyCode.W))

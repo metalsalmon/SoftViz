@@ -19,7 +19,7 @@ public class CommitedFilesManager : MonoBehaviour
     void OnMouseDown()
     {
         foreach (var file in building.commitedFiles)
-            Debug.Log(file.action + ": " + file.file) ;
+            Debug.Log(file.action + ": " + file.file + "   :::  " + file.date);
     }
 
     public void SetBuilding(Building building)

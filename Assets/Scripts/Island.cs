@@ -9,13 +9,13 @@ public class Island
     public DateTime? DateFrom;
     public DateTime? DateTo;
     public List<DateTime> dates;
+    public bool show = false;
 
-    public Island(GameObject islandInstance, DateTime? DateFrom, DateTime? DateTo)
+    public Island(DateTime? DateFrom, DateTime? DateTo)
     {
         dates = new List<DateTime>();
         this.DateFrom = DateFrom;
         this.DateTo = DateTo;
-        this.islandInstance = islandInstance;
     }
 
     public void AddDate(DateTime date)

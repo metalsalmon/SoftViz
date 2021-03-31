@@ -12,16 +12,16 @@ public class VisualizationManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int range = 1;
+        int range = 7;
         jsonReader.LoadData("aswi2017vana");
 
-        buildManager.CreateIslands(jsonReader.allDates, range);
+        buildManager.CreateIslands(jsonReader.allDates, range, false);
 
-        buildManager.CreateBuildings(jsonReader.authors, jsonReader.allDates);
+        buildManager.CreateBuildings(jsonReader.authors, jsonReader.allDates, true, true, true);
         buildManager.RenderBuildings();
 
         buildManager.CreatePowerLines(jsonReader.tickets);
-        //buildManager.RenderPowerLines();
+        buildManager.RenderPowerLines();
     }
 
     // Update is called once per frame
