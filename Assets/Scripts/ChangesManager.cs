@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ChangesManager : MonoBehaviour
 {
@@ -20,6 +21,24 @@ public class ChangesManager : MonoBehaviour
     {
         foreach (var change in building.changes)
             Debug.Log(change.changes + "   :::  " + change.created);
+
+        var panel = GameObject.Find("Changes");
+        GameObject textTemplate = panel.transform.GetChild(0).gameObject;
+        textTemplate.SetActive(true);
+
+        var ContentTransform = GameObject.Find("ChangesContent").transform;
+
+        foreach (Transform child in ContentTransform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (var change in building.changes)
+        {
+            textTemplate.GetComponent<Text>().text = change.created + "  :  " + change.changes + "  :  " + change.comment;
+            Instantiate(textTemplate, ContentTransform);
+        }
+        textTemplate.SetActive(false);
     }
 
     public void SetBuilding(Building building)
