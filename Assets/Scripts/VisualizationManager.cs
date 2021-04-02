@@ -1,24 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class VisualizationManager : MonoBehaviour
 {
-    JsonReader jsonReader = new JsonReader();
+    JsonReader jsonReader;
     BuildManager buildManager = new BuildManager();
     int range = 7;
     bool ShowAllIslands = false;
+    //string dataset = "aswi2017vana";
 
     // Start is called before the first frame update
     void Start()
     {
-
-        
-        jsonReader.LoadData("aswi2017vana");
-        Build();
-        
 
     }
 
@@ -72,6 +70,19 @@ public class VisualizationManager : MonoBehaviour
         }
 
         buildManager = new BuildManager();
+    }
+
+    public void ChooseDataset(Dropdown dropdown)
+    {
+        ClearObjects();
+        LoadDataset(dropdown.options[dropdown.value].text);
+        Build();
+    }
+
+    public void LoadDataset(string dataset)
+    {
+        jsonReader = new JsonReader();
+        jsonReader.LoadData(dataset);
     }
 
 }
