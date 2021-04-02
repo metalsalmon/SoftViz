@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class VisualizationManager : MonoBehaviour
 {
@@ -12,12 +13,20 @@ public class VisualizationManager : MonoBehaviour
     BuildManager buildManager = new BuildManager();
     int range = 7;
     bool ShowAllIslands = false;
-    //string dataset = "aswi2017vana";
+    string dataset = "aswi2017vana";
+    public Text omg;
+    [SerializeField]
+    public Text wtf;
+
+    [SerializeField]
+    public ScrollView commits;
+
 
     // Start is called before the first frame update
     void Start()
     {
-
+        LoadDataset(dataset);
+        Build();
     }
 
     // Update is called once per frame
@@ -83,6 +92,7 @@ public class VisualizationManager : MonoBehaviour
     {
         jsonReader = new JsonReader();
         jsonReader.LoadData(dataset);
+
     }
 
 }

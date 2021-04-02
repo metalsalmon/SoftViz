@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using SimpleJSON;
 using System;
+using System.Globalization;
 
 public class Author
 {
@@ -188,7 +189,7 @@ public class JsonReader
     {
         if (!string.IsNullOrWhiteSpace(date))
         {
-            return DateTime.Parse(date).Date;
+            return DateTime.Parse(date);
         }
         else
         {
