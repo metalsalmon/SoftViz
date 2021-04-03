@@ -40,6 +40,7 @@ public class BuildManager : MonoBehaviour
         {
             if (showAll)
             {
+                island.show = true;
                 var islandInstance = Instantiate(islandPrefab, new Vector3(x, z, y), Quaternion.identity);
                 islandInstance.transform.GetChild(1).GetComponent<TextMesh>().text = island.index + " : " + island.DateFrom.Value.ToString("dd.MM.yyyy") + " - " + island.DateTo.Value.ToString("dd.MM.yyyy");
                 island.islandInstance = islandInstance;
@@ -71,6 +72,9 @@ public class BuildManager : MonoBehaviour
                 }
             }
         }
+
+        SetOverviewCamera(islands.Where(island => island.show).Count());       
+
     }
 
     public void RenderBuildings()
@@ -187,6 +191,15 @@ public class BuildManager : MonoBehaviour
                 y_line += 0.2f;
             }
         }
+    }
+
+    public void SetOverviewCamera(int islandCount)
+    {
+        var overviewCamera = GameObject.Find("OverviewCamera");
+
+        overviewCamera.transform.position = new Vector3(20 * islandCount/2, overviewCamera.transform.position.y, overviewCamera.transform.position.z);
+
+
     }
 
 }
