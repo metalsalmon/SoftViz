@@ -12,15 +12,8 @@ public class VisualizationManager : MonoBehaviour
     JsonReader jsonReader;
     BuildManager buildManager = new BuildManager();
     int range = 7;
-    bool ShowAllIslands = false;
+    bool ShowAllIslands = false, showCommits = true, showChanges = true, showCommitedFiles = true;
     string dataset = "aswi2017vana";
-    public Text omg;
-    [SerializeField]
-    public Text wtf;
-
-    [SerializeField]
-    public ScrollView commits;
-
 
     // Start is called before the first frame update
     void Start()
@@ -37,9 +30,10 @@ public class VisualizationManager : MonoBehaviour
 
     public void Build()
     {
+        ClearObjects();
         buildManager.CreateIslands(jsonReader.allDates, range, ShowAllIslands);
 
-        buildManager.CreateBuildings(jsonReader.authors, jsonReader.allDates, true, true, true);
+        buildManager.CreateBuildings(jsonReader.authors, jsonReader.allDates, showCommits, showChanges, showCommitedFiles);
         buildManager.RenderBuildings();
 
         buildManager.CreatePowerLines(jsonReader.tickets);
@@ -48,10 +42,10 @@ public class VisualizationManager : MonoBehaviour
 
     public void GetInputDays(string days)
     {
-
-        if (Int32.TryParse(days, out range))
+        int daysInt;
+        if (Int32.TryParse(days, out daysInt) && daysInt > 0)
         {
-            ClearObjects();
+            range = daysInt;
             Build();
         }
         
@@ -59,8 +53,25 @@ public class VisualizationManager : MonoBehaviour
 
     public void ShowAllDates(bool value)
     {
-        ClearObjects();
         ShowAllIslands = value;
+        Build();
+    }
+
+    public void ShowCommits(bool value)
+    {
+        showCommits = value;
+        Build();
+    }
+
+    public void ShowChanges(bool value)
+    {
+        showChanges = value;
+        Build();
+    }
+
+    public void ShowFiles(bool value)
+    {
+        showCommitedFiles = value;
         Build();
     }
 
@@ -83,7 +94,6 @@ public class VisualizationManager : MonoBehaviour
 
     public void ChooseDataset(Dropdown dropdown)
     {
-        ClearObjects();
         LoadDataset(dropdown.options[dropdown.value].text);
         Build();
     }
@@ -92,7 +102,6 @@ public class VisualizationManager : MonoBehaviour
     {
         jsonReader = new JsonReader();
         jsonReader.LoadData(dataset);
-
     }
 
 }
