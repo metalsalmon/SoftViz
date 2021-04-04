@@ -38,7 +38,7 @@ public class CommitsManager : MonoBehaviour
 
         foreach (var commit in building.commits)
         {
-            textTemplate.GetComponent<Text>().text = commit.created + "  :  " +commit.message;
+            textTemplate.GetComponent<Text>().text = commit.message;
             Instantiate(textTemplate, ContentTransform);
         }
         textTemplate.SetActive(false);

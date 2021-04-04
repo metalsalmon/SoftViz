@@ -35,7 +35,7 @@ public class ChangesManager : MonoBehaviour
 
         foreach (var change in building.changes)
         {
-            textTemplate.GetComponent<Text>().text = change.created + "  :  " + change.changes + "  :  " + change.comment;
+            textTemplate.GetComponent<Text>().text = change.changes + "  :  " + change.comment;
             Instantiate(textTemplate, ContentTransform);
         }
         textTemplate.SetActive(false);

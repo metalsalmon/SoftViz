@@ -189,7 +189,7 @@ public class JsonReader
     {
         if (!string.IsNullOrWhiteSpace(date))
         {
-            return DateTime.Parse(date);
+            return DateTime.Parse(date).Date;
         }
         else
         {

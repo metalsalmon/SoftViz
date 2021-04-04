@@ -35,7 +35,7 @@ public class CommitedFilesManager : MonoBehaviour
 
         foreach (var commitedFile in building.commitedFiles)
         {
-            textTemplate.GetComponent<Text>().text = commitedFile.action + "  :  " + commitedFile.file + "  :  " + commitedFile.date;
+            textTemplate.GetComponent<Text>().text = commitedFile.action + "  :  " + commitedFile.file;
             Instantiate(textTemplate, ContentTransform);
         }
         textTemplate.SetActive(false);
