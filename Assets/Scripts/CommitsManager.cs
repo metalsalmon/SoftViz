@@ -23,7 +23,7 @@ public class CommitsManager : MonoBehaviour
     void OnMouseDown()
     {
         foreach(var commit in building.commits)
-            Debug.Log(commit.message + "   :::  " + commit.created);
+            Debug.Log(commit.created + "   :::  " + commit.created);
 
         var panel = GameObject.Find("Commits");
         GameObject textTemplate = panel.transform.GetChild(0).gameObject;

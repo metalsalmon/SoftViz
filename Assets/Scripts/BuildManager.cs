@@ -38,6 +38,7 @@ public class BuildManager : MonoBehaviour
 
         foreach (var island in islands)
         {
+            island.positionX = x;
             if (showAll)
             {
                 island.show = true;

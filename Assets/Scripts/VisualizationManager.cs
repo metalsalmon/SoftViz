@@ -40,15 +40,28 @@ public class VisualizationManager : MonoBehaviour
         buildManager.RenderPowerLines();
     }
 
+    //date range input
     public void GetInputDays(string days)
     {
         int daysInt;
         if (Int32.TryParse(days, out daysInt) && daysInt > 0)
         {
             range = daysInt;
-            Build();
+            ChangeCameraPosition();
         }
         
+    }
+
+    //place camera in front of the first day of chosen data range
+    public void ChangeCameraPosition()
+    {
+        var camera = GameObject.Find("MainCamera");
+        var dateFrom = buildManager.islands.FirstOrDefault(island => island.positionX == camera.transform.position.x).dates[0].Date;
+        Build();
+        var xPos = buildManager.islands.FirstOrDefault(island => island.dates.Contains(dateFrom)).positionX;
+        camera.transform.position = new Vector3(xPos, camera.transform.position.y, camera.transform.position.z);
+        Debug.Log(dateFrom);
+
     }
 
     public void ShowAllDates(bool value)
