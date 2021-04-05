@@ -21,7 +21,7 @@ public class IslandManager : MonoBehaviour
 
     void OnMouseDown()
     {
-        Debug.Log(island.DateFrom);
+       // Debug.Log(island.DateFrom);
     }
 
     public void setIsland(Island island)

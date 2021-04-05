@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Building
 {
+    public int id;
     public DateTime dateFrom;
     public DateTime dateTo;
     public string name;
@@ -20,6 +21,7 @@ public class Building
 
     public Building(Author author, DateTime dateFrom, DateTime dateTo, bool showCommits, bool showChanges, bool showCommitedFiles)
     {
+        this.id = author.id;
         this.name = author.name;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;

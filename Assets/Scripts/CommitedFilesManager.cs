@@ -19,19 +19,20 @@ public class CommitedFilesManager : MonoBehaviour
     }
     void OnMouseDown()
     {
+        var personManager = transform.parent.parent.gameObject.transform.GetChild(0).GetComponent<PersonManager>();
+        personManager.ClearPanels();
+        personManager.HighlightPerson(building.name, building.id);
+        personManager.HighightTickets(building);
+
         foreach (var file in building.commitedFiles)
             Debug.Log(file.action + ": " + file.file + "   :::  " + file.date);
 
-        var panel = GameObject.Find("CommitedFiles");
+        GameObject.Find("WorkLabel").GetComponent<Text>().text = "Subory";
+        var panel = GameObject.Find("DetailsPanel");
         GameObject textTemplate = panel.transform.GetChild(0).gameObject;
         textTemplate.SetActive(true);
 
-        var ContentTransform = GameObject.Find("CommitedFilesContent").transform;
-
-        foreach (Transform child in ContentTransform)
-        {
-            Destroy(child.gameObject);
-        }
+        var ContentTransform = GameObject.Find("DetailsContent").transform;
 
         foreach (var commitedFile in building.commitedFiles)
         {
@@ -39,9 +40,6 @@ public class CommitedFilesManager : MonoBehaviour
             Instantiate(textTemplate, ContentTransform);
         }
         textTemplate.SetActive(false);
-
-        var personManager = transform.parent.parent.gameObject.transform.GetChild(0).GetComponent<PersonManager>();
-        personManager.HighlightPerson(building.name);
     }
 
     public void SetBuilding(Building building)

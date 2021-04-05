@@ -6,7 +6,6 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     bool mainView = true;
-    bool allowRotation = false;
 
     // Start is called before the first frame update
     void Start()
@@ -19,11 +18,13 @@ public class CameraMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.D))
         {
+            clearPanels();
             transform.position = new Vector3(transform.position.x + 20, transform.position.y, transform.position.z);
         }
 
         if (Input.GetKeyDown(KeyCode.A))
         {
+            clearPanels();
             transform.position = new Vector3(transform.position.x - 20, transform.position.y, transform.position.z);
         }
 
@@ -53,12 +54,11 @@ public class CameraMovement : MonoBehaviour
             transform.Rotate(new Vector3(-83, 0, 0));
         }
 
-        if(allowRotation)
-        {
-            transform.Rotate(Vector3.forward, 10.0f * Time.deltaTime);
+    }
 
-        }
-
+    public void clearPanels()
+    {
+        GameObject.Find("VisualizationManager").GetComponent<VisualizationManager>().ClearPanels();
     }
 
 }

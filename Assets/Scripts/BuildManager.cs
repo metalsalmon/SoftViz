@@ -202,7 +202,9 @@ public class BuildManager : MonoBehaviour
 
                 var lineRenderer = powerlinePrefab.transform.GetChild(0).GetComponent<LineRenderer>();
                 lineRenderer.SetPosition(0, new Vector3(x_start, y_line, z_start));
-
+                
+                if (powerline.ticket.due == null)
+                    continue;
                 var endIsland = islands.FirstOrDefault(island => island.dates.Contains(powerline.ticket.due.Value));
                 if (endIsland == null)
                     endIsland = lastIsland;

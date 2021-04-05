@@ -30,6 +30,7 @@ public class VisualizationManager : MonoBehaviour
 
     public void Build()
     {
+        ClearPanels();
         ClearObjects();
         buildManager.CreateIslands(jsonReader.allDates, range, ShowAllIslands);
 
@@ -115,6 +116,23 @@ public class VisualizationManager : MonoBehaviour
     {
         jsonReader = new JsonReader();
         jsonReader.LoadData(dataset);
+    }
+
+    public void ClearPanels()
+    {
+        var changesContent = GameObject.Find("DetailsContent").transform;
+        var ticketsContent = GameObject.Find("TicketsContent").transform;
+
+        foreach (Transform child in changesContent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in ticketsContent)
+        {
+            Destroy(child.gameObject);
+        }
+
     }
 
 }

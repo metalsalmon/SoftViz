@@ -22,19 +22,21 @@ public class CommitsManager : MonoBehaviour
     }
     void OnMouseDown()
     {
-        foreach(var commit in building.commits)
+        var personManager = transform.parent.parent.gameObject.transform.GetChild(0).GetComponent<PersonManager>();
+        personManager.ClearPanels();
+        personManager.HighlightPerson(building.name, building.id);
+        personManager.HighightTickets(building);
+
+        foreach (var commit in building.commits)
             Debug.Log(commit.created + "   :::  " + commit.created);
 
-        var panel = GameObject.Find("Commits");
+        GameObject.Find("WorkLabel").GetComponent<Text>().text = "Commity";
+
+        var panel = GameObject.Find("DetailsPanel");
         GameObject textTemplate = panel.transform.GetChild(0).gameObject;
         textTemplate.SetActive(true);
 
-        var ContentTransform = GameObject.Find("CommitsContent").transform;
-
-        foreach (Transform child in ContentTransform)
-        {
-            Destroy(child.gameObject);
-        }
+        var ContentTransform = GameObject.Find("DetailsContent").transform;
 
         foreach (var commit in building.commits)
         {
@@ -42,11 +44,6 @@ public class CommitsManager : MonoBehaviour
             Instantiate(textTemplate, ContentTransform);
         }
         textTemplate.SetActive(false);
-
-        var personManager = transform.parent.parent.gameObject.transform.GetChild(0).GetComponent<PersonManager>();
-        personManager.HighlightPerson(building.name);
-        personManager.HighightTickets(building);
-
     }
 
     public void SetBuilding(Building building)

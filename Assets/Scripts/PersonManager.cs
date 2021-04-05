@@ -21,9 +21,12 @@ public class PersonManager : MonoBehaviour
 
     void OnMouseDown()
     {
-        HighlightPerson(building.name);
-
+        ClearPanels();
+        HighlightPerson(building.name, building.id);
         HighightTickets(building);
+
+
+
 
     }
 
@@ -32,7 +35,7 @@ public class PersonManager : MonoBehaviour
         this.building = building;
     }
 
-    public void HighlightPerson(string name)
+    public void HighlightPerson(string name, int id)
     {
         var persons = GameObject.FindGameObjectsWithTag("Person");
         var author = GameObject.FindGameObjectWithTag("AuthorName");
@@ -42,7 +45,7 @@ public class PersonManager : MonoBehaviour
         foreach (var person in persons)
         {
             var personManager = person.transform.GetComponent<PersonManager>();
-            if (personManager.building.name == name)
+            if (personManager.building.id == id)
             {
                 person.transform.GetComponent<Renderer>().material.color = Color.black;
             }
@@ -52,10 +55,10 @@ public class PersonManager : MonoBehaviour
             }
         }
     }
-
     public void HighightTickets(Building building)
     {
         Ticket ticket;
+        List<Ticket> tickets = new List<Ticket>();
         var powerLines = GameObject.FindGameObjectsWithTag("PowerLine");
         foreach (GameObject obj in powerLines)
         {
@@ -66,7 +69,10 @@ public class PersonManager : MonoBehaviour
             {
                 obj.GetComponent<Renderer>().material.color = Color.HSVToRGB(H, 1, V);
                 if (ticket.start >= building.dateFrom && ticket.start <= building.dateTo || ticket.due >= building.dateFrom && ticket.due <= building.dateTo || (ticket.start < building.dateFrom && ticket.due > building.dateTo))
+                {
                     Debug.Log(ticket.start + " - " + ticket.due + " ::: " + ticket.name + " ::: " + ticket.id);
+                    tickets.Add(ticket);
+                }
             }
             else
             {
@@ -74,5 +80,38 @@ public class PersonManager : MonoBehaviour
             }
 
         }
+        showTickets(tickets);
+    }
+
+    public void showTickets(List<Ticket> tickets)
+    {
+        var panel = GameObject.Find("TicketsPanel");
+        GameObject textTemplate = panel.transform.GetChild(0).gameObject;
+        textTemplate.SetActive(true);
+        var TicketsContent = GameObject.Find("TicketsContent").transform;
+
+        foreach (var ticket in tickets)
+        {
+            textTemplate.GetComponent<Text>().text = ticket.name + "  cas : " + ticket.spent;
+            Instantiate(textTemplate, TicketsContent);
+        }
+        textTemplate.SetActive(false);
+    }
+
+    public void ClearPanels()
+    {
+        var changesContent = GameObject.Find("DetailsContent").transform;
+        var ticketsContent = GameObject.Find("TicketsContent").transform;
+
+        foreach (Transform child in changesContent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in ticketsContent)
+        {
+            Destroy(child.gameObject);
+        }
+
     }
 }

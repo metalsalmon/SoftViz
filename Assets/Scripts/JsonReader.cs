@@ -129,6 +129,20 @@ public class Commit
     }
 }
 
+public class Edge
+{
+    public int from;
+    public int to;
+    public int archetype;
+
+    public Edge(int from, int to, int archetype)
+    {
+        this.from = from;
+        this.to = to;
+        this.archetype = archetype;
+    }
+}
+
 public class JsonReader
 {
     public List<Author> authors = new List<Author>();
@@ -136,6 +150,7 @@ public class JsonReader
     public List<Change> changes = new List<Change>();
     public List<File> files = new List<File>();
     public List<Ticket> tickets = new List<Ticket>();
+    public List<Edge> edges = new List<Edge>();
     public List<string> dates = new List<string>();
     public List<DateTime> allDates = new List<DateTime>();
 
@@ -167,6 +182,11 @@ public class JsonReader
                     commits.Add(new Commit(vertex["id"], vertex["attributes"]["1"], vertex["attributes"]["4"], vertex["attributes"]["8"][0], ParseDate(vertex["attributes"]["26"]), vertex["attributes"]["27"], ToStringArray(vertex["attributes"]["28"].AsArray)));
                     break;
             }
+        }
+
+        foreach (var edge in data["edges"].Values)
+        {
+            edges.Add(new Edge(edge["from"].AsInt, edge["to"].AsInt, edge["archetype"].AsInt));       
         }
 
         GetAllDates();
@@ -228,10 +248,40 @@ public class JsonReader
     {
         foreach (var author in authors)
         {
+            /*
             author.commits = commits.Where(commit => commit.author == author.name).ToList();
             author.changes = changes.Where(change => change.author == author.name).ToList();
             author.files = files.Where(file => file.author == author.name).ToList();
             author.tickets = tickets.Where(ticket => ticket.assignee == author.name).ToList();
+            author.commitedFiles = parseCommitedFiles(author, author.commits);
+            */
+
+            foreach (var edge in edges)
+            {
+                if(author.id == edge.from)
+                {
+                    if (edge.archetype == 1)
+                    {
+                        author.tickets.Add(tickets.First(ticket => ticket.id == edge.to));
+                    }
+
+                    if (edge.archetype == 2)
+                    {
+                        author.commits.Add(commits.First(commit => commit.id == edge.to));
+                    }
+                    if (edge.archetype == 0)
+                    {
+                        var change = changes.FirstOrDefault(change => change.id == edge.to);
+                        if (change != null)
+                        {
+                            author.changes.Add(change);
+
+                        }
+                    }
+
+                }
+
+            }
             author.commitedFiles = parseCommitedFiles(author, author.commits);
         }
     }

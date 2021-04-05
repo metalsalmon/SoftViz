@@ -19,19 +19,21 @@ public class ChangesManager : MonoBehaviour
     }
     void OnMouseDown()
     {
+        var personManager = transform.parent.parent.gameObject.transform.GetChild(0).GetComponent<PersonManager>();
+        personManager.ClearPanels();
+        personManager.HighlightPerson(building.name, building.id);
+        personManager.HighightTickets(building);
+
         foreach (var change in building.changes)
             Debug.Log(change.changes + "   :::  " + change.created);
 
-        var panel = GameObject.Find("Changes");
+        GameObject.Find("WorkLabel").GetComponent<Text>().text = "Manazment";
+
+        var panel = GameObject.Find("DetailsPanel");
         GameObject textTemplate = panel.transform.GetChild(0).gameObject;
         textTemplate.SetActive(true);
 
-        var ContentTransform = GameObject.Find("ChangesContent").transform;
-
-        foreach (Transform child in ContentTransform)
-        {
-            Destroy(child.gameObject);
-        }
+        var ContentTransform = GameObject.Find("DetailsContent").transform;
 
         foreach (var change in building.changes)
         {
@@ -39,11 +41,6 @@ public class ChangesManager : MonoBehaviour
             Instantiate(textTemplate, ContentTransform);
         }
         textTemplate.SetActive(false);
-
-
-        var personManager = transform.parent.parent.gameObject.transform.GetChild(0).GetComponent<PersonManager>();
-        personManager.HighlightPerson(building.name);
-        personManager.HighightTickets(building);
     }
 
     public void SetBuilding(Building building)
