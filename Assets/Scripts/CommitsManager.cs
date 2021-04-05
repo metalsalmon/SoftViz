@@ -45,6 +45,7 @@ public class CommitsManager : MonoBehaviour
 
         var personManager = transform.parent.parent.gameObject.transform.GetChild(0).GetComponent<PersonManager>();
         personManager.HighlightPerson(building.name);
+        personManager.HighightTickets(building);
 
     }
 

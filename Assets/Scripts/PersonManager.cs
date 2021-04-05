@@ -21,28 +21,9 @@ public class PersonManager : MonoBehaviour
 
     void OnMouseDown()
     {
-        Ticket ticket;
-
         HighlightPerson(building.name);
 
-        var powerLines = GameObject.FindGameObjectsWithTag("PowerLine");
-        foreach (GameObject obj in powerLines)
-        {
-            Color.RGBToHSV(obj.GetComponent<Renderer>().material.color, out H, out S, out V);
-            var powerLineManager = obj.transform.GetComponent<PowerLineManager>();
-            ticket = powerLineManager.getTicket();
-            if (ticket.assignee == building.name)
-            {
-                obj.GetComponent<Renderer>().material.color = Color.HSVToRGB(H, 1, V);
-                if(ticket.start >= building.dateFrom && ticket.start <= building.dateTo || ticket.due >= building.dateFrom && ticket.due <= building.dateTo || ( ticket.start < building.dateFrom && ticket.due > building.dateTo))
-                    Debug.Log(ticket.start + " - " + ticket.due + " ::: " + ticket.name + " ::: " + ticket.id);
-            }
-            else
-            {
-                obj.GetComponent<Renderer>().material.color = Color.HSVToRGB(H, 0.1f, V);
-            }
-
-        }
+        HighightTickets(building);
 
     }
 
@@ -69,6 +50,29 @@ public class PersonManager : MonoBehaviour
             {
                 person.transform.GetComponent<Renderer>().material.color = Color.white;
             }
+        }
+    }
+
+    public void HighightTickets(Building building)
+    {
+        Ticket ticket;
+        var powerLines = GameObject.FindGameObjectsWithTag("PowerLine");
+        foreach (GameObject obj in powerLines)
+        {
+            Color.RGBToHSV(obj.GetComponent<Renderer>().material.color, out H, out S, out V);
+            var powerLineManager = obj.transform.GetComponent<PowerLineManager>();
+            ticket = powerLineManager.getTicket();
+            if (ticket.assignee == building.name)
+            {
+                obj.GetComponent<Renderer>().material.color = Color.HSVToRGB(H, 1, V);
+                if (ticket.start >= building.dateFrom && ticket.start <= building.dateTo || ticket.due >= building.dateFrom && ticket.due <= building.dateTo || (ticket.start < building.dateFrom && ticket.due > building.dateTo))
+                    Debug.Log(ticket.start + " - " + ticket.due + " ::: " + ticket.name + " ::: " + ticket.id);
+            }
+            else
+            {
+                obj.GetComponent<Renderer>().material.color = Color.HSVToRGB(H, 0.1f, V);
+            }
+
         }
     }
 }
