@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4916977018833378785}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -8, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6603164214424491521}
@@ -85,6 +85,7 @@ GameObject:
   - component: {fileID: 5461172541893821494}
   - component: {fileID: 5360838441134110395}
   - component: {fileID: 4762757882541590542}
+  - component: {fileID: 6094884796568756789}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -100,8 +101,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8773017541821462079}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1216, z: 0}
-  m_LocalScale: {x: 1, y: 0.12154752, z: 1}
+  m_LocalPosition: {x: 0, y: 0.2804, z: 0}
+  m_LocalScale: {x: 1, y: 0.2803129, z: 1}
   m_Children: []
   m_Father: {fileID: 7037420697689067318}
   m_RootOrder: 0
@@ -169,3 +170,15 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &6094884796568756789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8773017541821462079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf15b8dce66ed2948a313dce4cf080fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

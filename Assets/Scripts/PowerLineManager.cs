@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IslandManager : MonoBehaviour
+public class PowerLineManager : MonoBehaviour
 {
+    Ticket ticket;
     // Start is called before the first frame update
-
-    Island island;
-    int positionX;
     void Start()
     {
         
@@ -19,13 +17,13 @@ public class IslandManager : MonoBehaviour
         
     }
 
-    void OnMouseDown()
+    public void setTicket(Ticket ticket)
     {
-        Debug.Log(island.DateFrom);
+        this.ticket = ticket;
     }
 
-    public void setIsland(Island island)
+    public Ticket getTicket()
     {
-        this.island = island;
+        return ticket;
     }
 }

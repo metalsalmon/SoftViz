@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8657494131961792506}
   - component: {fileID: 8807800526940756168}
-  - component: {fileID: 6507515114272567722}
   m_Layer: 0
   m_Name: IslandPrefab
   m_TagString: Island
@@ -75,18 +74,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6507515114272567722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1460082047488365448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130bd89776929964caaeda0827adc339, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7254415462977829349
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,6 +86,7 @@ GameObject:
   - component: {fileID: 7254415462977829345}
   - component: {fileID: 7254415462977829350}
   - component: {fileID: 7254415462977829351}
+  - component: {fileID: 3895614133345554019}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -183,6 +171,18 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &3895614133345554019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7254415462977829349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130bd89776929964caaeda0827adc339, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8512168343221679044
 GameObject:
   m_ObjectHideFlags: 0

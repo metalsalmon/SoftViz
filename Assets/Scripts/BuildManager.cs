@@ -84,12 +84,14 @@ public class BuildManager : MonoBehaviour
         commitsPrefab = (GameObject)Resources.Load("Prefabs/CommitsPrefab", typeof(GameObject));
         filesPrefab = (GameObject)Resources.Load("Prefabs/FilesPrefab", typeof(GameObject));
         changesPrefab = (GameObject)Resources.Load("Prefabs/ChangesPrefab", typeof(GameObject));
-        var personSizeY = buildingPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.y / 2;
+        var personSizeY = buildingPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.y;
 
         foreach (var island in islands)
         {
-            if(island.show)
+            if (island.show)
             {
+                var islandManager = island.islandInstance.transform.GetChild(0).GetComponent<IslandManager>();
+                islandManager.setIsland(island);
                 float IslandMinX = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.min.x + 1;
                 float IslandMinZ = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.min.z + 3;
 
@@ -101,10 +103,11 @@ public class BuildManager : MonoBehaviour
 
                     buildingPrefab.transform.position = new Vector3(IslandMinX, 0, 0);
                 
-                    IslandMinX += buildingPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.x + 0.2f;
+                    IslandMinX += buildingPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.x + 0.25f;
                     var buildingInstance = Instantiate(buildingPrefab, island.islandInstance.gameObject.transform, false);
                     buildingInstance.transform.localPosition = new Vector3(buildingInstance.transform.localPosition.x, buildingInstance.transform.localPosition.y, IslandMinZ + building.tickets.Count);
-
+                    var personManager = buildingInstance.transform.GetChild(0).GetComponent<PersonManager>();
+                    personManager.SetBuilding(building);
 
                     if (building.commits.Count != 0)
                     {
@@ -158,38 +161,58 @@ public class BuildManager : MonoBehaviour
 
     public void RenderPowerLines()
     {
+
         var lastIsland = islands.Where(island => island.show).Last();
+        Color color = Color.HSVToRGB(1, 20, 100);
 
         float x_end;
-        float y_line = 0;
+        float y_line = y_line = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.max.y + 3.5f;
+        float z_start = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.max.z + 1;
         powerlinePrefab = (GameObject)Resources.Load("Prefabs/PowerLinePrefab", typeof(GameObject));
 
         foreach (var island in islands)
         {
             if (!showAll && !island.show)
                 continue;
-            float x_start = island.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.min.x;
-            if (y_line == 0)
-                y_line = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.max.y + 3;
-            float z_start = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.max.z + 1;
+            
+            float x_start = island.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.min.x;      
 
-            foreach (var powerline in powerLines.Where(powerline => powerline.show && powerline.ticket.created.Value >= island.DateFrom && powerline.ticket.created.Value <= island.DateTo))
+            foreach (var powerline in powerLines.Where(powerline => powerline.show && powerline.ticket.assignee != "unknown" &&
+                                                       powerline.ticket.created.Value >= island.DateFrom && powerline.ticket.created.Value <= island.DateTo))
             {
                 powerlinePrefab.transform.position = new Vector3(x_start, y_line, z_start);
+                switch (powerline.ticket.type)
+                {
+                    case "Task":
+                        color = Color.HSVToRGB(0.2f, 0.1f, 1);
+                        break;
+                    case "Bug":
+                        color = Color.HSVToRGB(1, 0.1f, 1);
+                        break;
+                    case "Feature":
+                        color = Color.HSVToRGB(0.65f, 0.1f, 1);
+                        break;
+                    case "Enhancement":
+                        color = Color.HSVToRGB(0.65f, 0.1f, 1);
+                        break;
+                    default:
+                        color = Color.HSVToRGB(0.8f, 0.1f, 1);
+                        break;
+                }
+                
+
                 var lineRenderer = powerlinePrefab.transform.GetChild(0).GetComponent<LineRenderer>();
                 lineRenderer.SetPosition(0, new Vector3(x_start, y_line, z_start));
 
-                foreach (var islandItem in islands)
-                {      
-                    if ((powerline.ticket.due >= islandItem.DateFrom && powerline.ticket.due <= islandItem.DateTo) || powerline.ticket.due > lastIsland.DateTo)
-                    {
-                        x_end = islandItem.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.max.x;
-                        lineRenderer.SetPosition(1, new Vector3(x_end, y_line, z_start));
-                    }
-                }
+                x_end = islands.FirstOrDefault(island => island.dates.Contains(powerline.ticket.due.Value)).islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.max.x;
+                lineRenderer.SetPosition(1, new Vector3(x_end, y_line, z_start));
 
                 var powerLineInstance = Instantiate(powerlinePrefab);
-                y_line += 0.2f;
+                powerLineInstance.transform.GetChild(0).GetComponent<Renderer>().material.color = color;
+                var powerLineManager = powerLineInstance.transform.GetChild(0).GetComponent<PowerLineManager>();
+                powerLineManager.setTicket(powerline.ticket);
+
+                y_line += 0.35f;
             }
         }
     }
