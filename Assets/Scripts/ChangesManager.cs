@@ -39,6 +39,10 @@ public class ChangesManager : MonoBehaviour
             Instantiate(textTemplate, ContentTransform);
         }
         textTemplate.SetActive(false);
+
+
+        var personManager = transform.parent.parent.gameObject.transform.GetChild(0).GetComponent<PersonManager>();
+        personManager.HighlightPerson(building.name);
     }
 
     public void SetBuilding(Building building)

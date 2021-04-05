@@ -144,9 +144,9 @@ public class BuildManager : MonoBehaviour
     {
         foreach (var island in islands)
         {
-            foreach (var atuhor in authors)
+            foreach (var author in authors)
             {
-                buildings.Add(new Building(atuhor, island.DateFrom.Value, island.DateTo.Value, showCommits, showChanges, showCommitedFiles));
+                buildings.Add(new Building(author, island.DateFrom.Value, island.DateTo.Value, showCommits, showChanges, showCommitedFiles));
             }
         }
     }
@@ -178,7 +178,7 @@ public class BuildManager : MonoBehaviour
             float x_start = island.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.min.x;      
 
             foreach (var powerline in powerLines.Where(powerline => powerline.show && powerline.ticket.assignee != "unknown" &&
-                                                       powerline.ticket.created.Value >= island.DateFrom && powerline.ticket.created.Value <= island.DateTo))
+                                                       powerline.ticket.start.Value.Date >= island.DateFrom.Value.Date && powerline.ticket.start.Value.Date <= island.DateTo.Value.Date))
             {
                 powerlinePrefab.transform.position = new Vector3(x_start, y_line, z_start);
                 switch (powerline.ticket.type)
@@ -198,13 +198,15 @@ public class BuildManager : MonoBehaviour
                     default:
                         color = Color.HSVToRGB(0.8f, 0.1f, 1);
                         break;
-                }
-                
+                }              
 
                 var lineRenderer = powerlinePrefab.transform.GetChild(0).GetComponent<LineRenderer>();
                 lineRenderer.SetPosition(0, new Vector3(x_start, y_line, z_start));
 
-                x_end = islands.FirstOrDefault(island => island.dates.Contains(powerline.ticket.due.Value)).islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.max.x;
+                var endIsland = islands.FirstOrDefault(island => island.dates.Contains(powerline.ticket.due.Value));
+                if (endIsland == null)
+                    endIsland = lastIsland;
+                x_end = endIsland.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.max.x;
                 lineRenderer.SetPosition(1, new Vector3(x_end, y_line, z_start));
 
                 var powerLineInstance = Instantiate(powerlinePrefab);

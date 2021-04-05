@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PersonManager : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class PersonManager : MonoBehaviour
     {
         Ticket ticket;
 
+        HighlightPerson(building.name);
+
         var powerLines = GameObject.FindGameObjectsWithTag("PowerLine");
         foreach (GameObject obj in powerLines)
         {
@@ -32,7 +35,7 @@ public class PersonManager : MonoBehaviour
             {
                 obj.GetComponent<Renderer>().material.color = Color.HSVToRGB(H, 1, V);
                 if(ticket.start >= building.dateFrom && ticket.start <= building.dateTo || ticket.due >= building.dateFrom && ticket.due <= building.dateTo || ( ticket.start < building.dateFrom && ticket.due > building.dateTo))
-                    Debug.Log(ticket.start + " - " + ticket.due + " ::: " + ticket.name);
+                    Debug.Log(ticket.start + " - " + ticket.due + " ::: " + ticket.name + " ::: " + ticket.id);
             }
             else
             {
@@ -48,6 +51,24 @@ public class PersonManager : MonoBehaviour
         this.building = building;
     }
 
+    public void HighlightPerson(string name)
+    {
+        var persons = GameObject.FindGameObjectsWithTag("Person");
+        var author = GameObject.FindGameObjectWithTag("AuthorName");
 
+        author.transform.GetComponent<Text>().text = name;
 
+        foreach (var person in persons)
+        {
+            var personManager = person.transform.GetComponent<PersonManager>();
+            if (personManager.building.name == name)
+            {
+                person.transform.GetComponent<Renderer>().material.color = Color.black;
+            }
+            else
+            {
+                person.transform.GetComponent<Renderer>().material.color = Color.white;
+            }
+        }
+    }
 }

@@ -43,6 +43,9 @@ public class CommitsManager : MonoBehaviour
         }
         textTemplate.SetActive(false);
 
+        var personManager = transform.parent.parent.gameObject.transform.GetChild(0).GetComponent<PersonManager>();
+        personManager.HighlightPerson(building.name);
+
     }
 
     public void SetBuilding(Building building)
