@@ -17,6 +17,10 @@ public class Building
     public List<File> files = new List<File>();
     public List<Ticket> tickets = new List<Ticket>();
     public List<(string action, string file, DateTime date)> commitedFiles = new List<(string, string, DateTime)>();
+    //time spent on the project (spent time from tickets)
+    public float timeSpent;
+    //all commits count
+    public float commitsCount;
     public bool show = true;
 
     public Building(Author author, DateTime dateFrom, DateTime dateTo, bool showCommits, bool showChanges, bool showCommitedFiles)
@@ -31,6 +35,8 @@ public class Building
         //this.files = author.files.Where(files => files.created.Value >= dateFrom && files.created.Value <= dateTo).ToList();
         this.tickets = author.tickets.Where(tickets => tickets.created.Value >= dateFrom && tickets.created.Value <= dateTo).ToList();
         if(showCommitedFiles) this.commitedFiles = author.commitedFiles.Where(file => file.date >= dateFrom && file.date <= dateTo).ToList();
+        timeSpent = (float)Math.Round((float)author.tickets.Select(ticket => ticket.spent).Sum(), 2);
+        commitsCount = author.commits.Count();
 
         if (commits.Count == 0 && changes.Count == 0 && files.Count == 0)
         {

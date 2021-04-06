@@ -85,6 +85,9 @@ public class BuildManager : MonoBehaviour
         filesPrefab = (GameObject)Resources.Load("Prefabs/FilesPrefab", typeof(GameObject));
         changesPrefab = (GameObject)Resources.Load("Prefabs/ChangesPrefab", typeof(GameObject));
         var personSizeY = buildingPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.y;
+        List<Building> islandBuildings = new List<Building>();
+        float minSpentTime = buildings.Select(building => building.timeSpent).Min();
+        float maxSpentTime = buildings.Where(building => building.name != "unknown").Select(building => building.timeSpent).Max();
 
         foreach (var island in islands)
         {
@@ -94,8 +97,15 @@ public class BuildManager : MonoBehaviour
                 islandManager.setIsland(island);
                 float IslandMinX = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.min.x + 1;
                 float IslandMinZ = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.min.z + 3;
+                float IslandMaxZ = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.max.z - 2;
 
-                foreach (var building in buildings.Where(building => building.show && building.dateFrom == island.DateFrom))
+
+                //order by commits count
+                islandBuildings = buildings.Where(building => building.show && building.dateFrom == island.DateFrom).OrderBy(building => building.commitsCount).ToList();
+
+                float buildingsGap = (islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.x) / islandBuildings.Count();
+
+                foreach (var building in islandBuildings)
                 {
                     GameObject filesInstance = null;
                     GameObject changesInstance = null;
@@ -103,9 +113,9 @@ public class BuildManager : MonoBehaviour
 
                     buildingPrefab.transform.position = new Vector3(IslandMinX, 0, 0);
                 
-                    IslandMinX += buildingPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.size.x + 0.25f;
+                    IslandMinX += buildingsGap;
                     var buildingInstance = Instantiate(buildingPrefab, island.islandInstance.gameObject.transform, false);
-                    buildingInstance.transform.localPosition = new Vector3(buildingInstance.transform.localPosition.x, buildingInstance.transform.localPosition.y, IslandMinZ + building.tickets.Count);
+                    buildingInstance.transform.localPosition = new Vector3(buildingInstance.transform.localPosition.x, buildingInstance.transform.localPosition.y, Scale(building.timeSpent, minSpentTime, maxSpentTime, IslandMinZ, IslandMaxZ));
                     var personManager = buildingInstance.transform.GetChild(0).GetComponent<PersonManager>();
                     personManager.SetBuilding(building);
 
@@ -138,6 +148,12 @@ public class BuildManager : MonoBehaviour
             }
 
         }
+    }
+
+    private float Scale(float value, float min, float max, float minScale, float maxScale)
+    {
+        float scaled = minScale + (float)(value - min) / (max - min) * (maxScale - minScale);
+        return scaled;
     }
 
     public void CreateBuildings(List<Author> authors, List<DateTime> dates, bool showCommits, bool showChanges, bool showCommitedFiles)

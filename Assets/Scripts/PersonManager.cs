@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class PersonManager : MonoBehaviour
 {
@@ -61,12 +62,12 @@ public class PersonManager : MonoBehaviour
             Color.RGBToHSV(obj.GetComponent<Renderer>().material.color, out H, out S, out V);
             var powerLineManager = obj.transform.GetComponent<PowerLineManager>();
             ticket = powerLineManager.getTicket();
-            if (ticket.assignee == building.name)
+            if (building.tickets.Any(x => x.id == ticket.id))
             {
                 obj.GetComponent<Renderer>().material.color = Color.HSVToRGB(H, 1, V);
                 if (ticket.start >= building.dateFrom && ticket.start <= building.dateTo || ticket.due >= building.dateFrom && ticket.due <= building.dateTo || (ticket.start < building.dateFrom && ticket.due > building.dateTo))
                 {
-                    Debug.Log(ticket.start + " - " + ticket.due + " ::: " + ticket.name + " ::: " + ticket.id);
+                    Debug.Log(ticket.assignee + " ::: " + ticket.start + " - " + ticket.due + " ::: " + ticket.name + " ::: " + ticket.id);
                     tickets.Add(ticket);
                 }
             }
