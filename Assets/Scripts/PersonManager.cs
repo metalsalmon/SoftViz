@@ -55,20 +55,20 @@ public class PersonManager : MonoBehaviour
     public void HighightTickets(Building building)
     {
         Ticket ticket;
-        List<Ticket> tickets = new List<Ticket>();
+        List<Ticket> IslandTickets = new List<Ticket>();
         var powerLines = GameObject.FindGameObjectsWithTag("PowerLine");
         foreach (GameObject obj in powerLines)
         {
             Color.RGBToHSV(obj.GetComponent<Renderer>().material.color, out H, out S, out V);
             var powerLineManager = obj.transform.GetComponent<PowerLineManager>();
             ticket = powerLineManager.getTicket();
-            if (building.tickets.Any(x => x.id == ticket.id))
+            if (building.author.tickets.Any(x => x.id == ticket.id))
             {
                 obj.GetComponent<Renderer>().material.color = Color.HSVToRGB(H, 1, V);
-                if (ticket.start >= building.dateFrom && ticket.start <= building.dateTo || ticket.due >= building.dateFrom && ticket.due <= building.dateTo || (ticket.start < building.dateFrom && ticket.due > building.dateTo))
+                if (!((ticket.start > building.dateTo) || (ticket.due < building.dateFrom)))
                 {
                     Debug.Log(ticket.assignee + " ::: " + ticket.start + " - " + ticket.due + " ::: " + ticket.name + " ::: " + ticket.id);
-                    tickets.Add(ticket);
+                    IslandTickets.Add(ticket);
                 }
             }
             else
@@ -77,7 +77,7 @@ public class PersonManager : MonoBehaviour
             }
 
         }
-        showTickets(tickets);
+        showTickets(IslandTickets);
     }
 
     public void showTickets(List<Ticket> tickets)
@@ -99,6 +99,7 @@ public class PersonManager : MonoBehaviour
     {
         var changesContent = GameObject.Find("DetailsContent").transform;
         var ticketsContent = GameObject.Find("TicketsContent").transform;
+        GameObject.Find("WorkLabel").GetComponent<Text>().text = "";
 
         foreach (Transform child in changesContent)
         {

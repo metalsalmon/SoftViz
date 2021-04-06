@@ -22,9 +22,11 @@ public class Building
     //all commits count
     public float commitsCount;
     public bool show = true;
+    public Author author;
 
     public Building(Author author, DateTime dateFrom, DateTime dateTo, bool showCommits, bool showChanges, bool showCommitedFiles)
     {
+        this.author = author;
         this.id = author.id;
         this.name = author.name;
         this.dateFrom = dateFrom;

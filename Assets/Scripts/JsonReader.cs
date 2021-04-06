@@ -235,7 +235,8 @@ public class JsonReader
         //}
         foreach (var ticket in tickets)
         {
-            dateList.Add(ticket.created.Value.Date);
+            dateList.Add(ticket.start.Value.Date);
+            if (ticket.due != null) dateList.Add(ticket.due.Value.Date);
         }
 
         dateList.Sort();

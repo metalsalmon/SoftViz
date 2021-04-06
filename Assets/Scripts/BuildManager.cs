@@ -123,7 +123,7 @@ public class BuildManager : MonoBehaviour
                     {
                         commitInstance = Instantiate(commitsPrefab, buildingInstance.transform, false);
                         commitInstance.transform.localPosition = new Vector3(commitInstance.transform.localPosition.x, commitInstance.transform.localPosition.y + personSizeY, commitInstance.transform.localPosition.z);
-                        commitInstance.transform.localScale = new Vector3(commitInstance.transform.localScale.x, building.commits.Count/3f, commitInstance.transform.localScale.z);
+                        commitInstance.transform.localScale = new Vector3(commitInstance.transform.localScale.x, building.commits.Count/5f, commitInstance.transform.localScale.z);
                         var commitManager = commitInstance.transform.GetChild(0).GetComponent<CommitsManager>();
                         commitManager.SetBuilding(building);
                     }
@@ -132,7 +132,7 @@ public class BuildManager : MonoBehaviour
                     {
                         changesInstance = Instantiate(changesPrefab, buildingInstance.transform, false);
                         changesInstance.transform.localPosition = new Vector3(changesInstance.transform.localPosition.x, personSizeY + (commitInstance != null ? commitInstance.transform.localScale.y :0), changesInstance.transform.localPosition.z);
-                        changesInstance.transform.localScale = new Vector3(changesInstance.transform.localScale.x, building.changes.Count/8f, changesInstance.transform.localScale.z);
+                        changesInstance.transform.localScale = new Vector3(changesInstance.transform.localScale.x, building.changes.Count/20f, changesInstance.transform.localScale.z);
                         var changesManager = changesInstance.transform.GetChild(0).GetComponent<ChangesManager>();
                         changesManager.SetBuilding(building);
                     }
@@ -140,7 +140,7 @@ public class BuildManager : MonoBehaviour
                     {
                         filesInstance = Instantiate(filesPrefab, buildingInstance.transform, false);
                         filesInstance.transform.localPosition = new Vector3(filesInstance.transform.localPosition.x, personSizeY + (commitInstance != null ? commitInstance.transform.localScale.y : 0)  + (changesInstance != null ? changesInstance.transform.localScale.y : 0), filesInstance.transform.localPosition.z);
-                        filesInstance.transform.localScale = new Vector3(filesInstance.transform.localScale.x, building.commitedFiles.Count/20f, filesInstance.transform.localScale.z);
+                        filesInstance.transform.localScale = new Vector3(filesInstance.transform.localScale.x, building.commitedFiles.Count/30f, filesInstance.transform.localScale.z);
                         var filesManager = filesInstance.transform.GetChild(0).GetComponent<CommitedFilesManager>();
                         filesManager.SetBuilding(building);
                     }
@@ -202,9 +202,12 @@ public class BuildManager : MonoBehaviour
             foreach (var powerline in powerLines.Where(powerline => powerline.show && powerline.ticket.assignee != "unknown" && powerline.ticket.due != null &&
                                                        powerline.ticket.start.Value.Date >= island.DateFrom.Value.Date && powerline.ticket.start.Value.Date <= island.DateTo.Value.Date))
             {
+
                 var endIsland = islands.FirstOrDefault(island => island.dates.Contains(powerline.ticket.due.Value));
                 if (endIsland == null)
+                {
                     endIsland = lastIsland;
+                }
                 x_end = endIsland.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.max.x;
 
                 //find the first empty position for the powerline

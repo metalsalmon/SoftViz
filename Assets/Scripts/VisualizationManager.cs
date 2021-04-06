@@ -61,7 +61,6 @@ public class VisualizationManager : MonoBehaviour
         Build();
         var xPos = buildManager.islands.FirstOrDefault(island => island.dates.Contains(dateFrom)).positionX;
         camera.transform.position = new Vector3(xPos, camera.transform.position.y, camera.transform.position.z);
-        Debug.Log(dateFrom);
 
     }
 
@@ -109,7 +108,12 @@ public class VisualizationManager : MonoBehaviour
     public void ChooseDataset(Dropdown dropdown)
     {
         LoadDataset(dropdown.options[dropdown.value].text);
+        var camera = GameObject.Find("MainCamera");
+        var IslandIndex = buildManager.islands.FirstOrDefault(island => island.positionX == camera.transform.position.x).index;
         Build();
+        var island = buildManager.islands.FirstOrDefault(island => island.index == IslandIndex);
+        var xPos = island == null ? 0 : island.positionX;
+        camera.transform.position = new Vector3(xPos, camera.transform.position.y, camera.transform.position.z);
     }
 
     public void LoadDataset(string dataset)
@@ -122,6 +126,7 @@ public class VisualizationManager : MonoBehaviour
     {
         var changesContent = GameObject.Find("DetailsContent").transform;
         var ticketsContent = GameObject.Find("TicketsContent").transform;
+        GameObject.Find("WorkLabel").GetComponent<Text>().text = "";
 
         foreach (Transform child in changesContent)
         {
