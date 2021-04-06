@@ -10,7 +10,7 @@ public class Author
 {
     public int id;
     public string name;
-    public List<string> roles;
+    public List<string> roles = new List<string>();
     public List<string> emails;
     public List<Commit> commits;
     public List<Change> changes;
@@ -21,7 +21,10 @@ public class Author
     {
         this.id = id;
         this.name = name;
-        this.roles = new List<string>(roles);
+        foreach (var role in roles)
+        {
+            this.roles.Add(role.Replace("\"", ""));
+        }
         this.emails = new List<string>(emails);
         commits = new List<Commit>();
         commitedFiles = new List<(string, string, DateTime)>();
@@ -170,7 +173,7 @@ public class JsonReader
                 case 1:
                     tickets.Add(new Ticket(vertex["id"], vertex["attributes"]["1"], vertex["attributes"]["2"], ParseDate(vertex["attributes"]["9"]), vertex["attributes"]["11"].AsInt,
                         vertex["attributes"]["12"][0], vertex["attributes"]["13"][0], vertex["attributes"]["14"][0], ParseDate(vertex["attributes"]["16"]), ParseDate(vertex["attributes"]["17"]),
-                        vertex["attributes"]["21"].AsDouble, vertex["attributes"]["22"].AsDouble, vertex["attributes"]["23"].AsDouble, vertex["attributes"]["19"][0], vertex["attributes"]["40"][0]));
+                        Math.Round(vertex["attributes"]["21"].AsDouble, 2), Math.Round(vertex["attributes"]["22"].AsDouble, 2), vertex["attributes"]["23"].AsDouble, vertex["attributes"]["19"][0], vertex["attributes"]["40"][0]));
                     break;
                 case 2:
                     files.Add(new File(vertex["id"], vertex["attributes"]["1"], vertex["attributes"]["8"][0], ParseDate(vertex["attributes"]["9"]), vertex["attributes"]["10"], vertex["attributes"]["31"].AsInt));

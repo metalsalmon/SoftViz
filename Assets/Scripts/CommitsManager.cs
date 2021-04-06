@@ -24,7 +24,7 @@ public class CommitsManager : MonoBehaviour
     {
         var personManager = transform.parent.parent.gameObject.transform.GetChild(0).GetComponent<PersonManager>();
         personManager.ClearPanels();
-        personManager.HighlightPerson(building.name, building.id);
+        personManager.HighlightPerson(building.name, building.id, building.roles);
         personManager.HighightTickets(building);
 
         foreach (var commit in building.commits)

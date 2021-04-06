@@ -23,7 +23,7 @@ public class PersonManager : MonoBehaviour
     void OnMouseDown()
     {
         ClearPanels();
-        HighlightPerson(building.name, building.id);
+        HighlightPerson(building.name, building.id, building.roles);
         HighightTickets(building);
     }
 
@@ -32,12 +32,21 @@ public class PersonManager : MonoBehaviour
         this.building = building;
     }
 
-    public void HighlightPerson(string name, int id)
+    public void HighlightPerson(string name, int id, List<string> roles)
     {
         var persons = GameObject.FindGameObjectsWithTag("Person");
         var author = GameObject.FindGameObjectWithTag("AuthorName");
+        var authorRoles = GameObject.FindGameObjectWithTag("AuthorRoles");
+        string rolesSplit = "";
 
         author.transform.GetComponent<Text>().text = name;
+
+        foreach(var role in roles)
+        {
+            rolesSplit += role + "  ";
+        }
+        authorRoles.transform.GetComponent<Text>().fontSize = 9;
+            authorRoles.transform.GetComponent<Text>().text = rolesSplit;
 
         foreach (var person in persons)
         {
@@ -89,7 +98,7 @@ public class PersonManager : MonoBehaviour
 
         foreach (var ticket in tickets)
         {
-            textTemplate.GetComponent<Text>().text = "[" + ticket.type + "] " + ticket.name + "  cas : " + ticket.spent;
+            textTemplate.GetComponent<Text>().text = "[" + ticket.type + "] cas : " + ticket.spent + "(" + ticket.estimate + ")  " + ticket.name;
             Instantiate(textTemplate, TicketsContent);
         }
         textTemplate.SetActive(false);

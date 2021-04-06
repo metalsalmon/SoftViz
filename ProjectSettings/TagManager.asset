@@ -9,6 +9,7 @@ TagManager:
   - Commits
   - Person
   - AuthorName
+  - AuthorRoles
   layers:
   - Default
   - TransparentFX
