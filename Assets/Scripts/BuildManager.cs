@@ -163,60 +163,51 @@ public class BuildManager : MonoBehaviour
     {
 
         var lastIsland = islands.Where(island => island.show).Last();
-        Color color = Color.HSVToRGB(1, 20, 100);
-
+        float posY = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.max.y + 3.5f;
         float x_end;
-        float y_line = y_line = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.max.y + 3.5f;
         float z_start = islandPrefab.transform.GetChild(0).GetComponent<Renderer>().bounds.max.z + 1;
         powerlinePrefab = (GameObject)Resources.Load("Prefabs/PowerLinePrefab", typeof(GameObject));
+        List<(float posX, float posY)> positions = new List<(float posX, float posY)>();
+        var lineRenderer = powerlinePrefab.transform.GetChild(0).GetComponent<LineRenderer>();
+
+        foreach (var powerline in powerLines)
+        {
+            positions.Add((int.MinValue, posY));
+            posY += 0.35f;
+        }
 
         foreach (var island in islands)
         {
             if (!showAll && !island.show)
                 continue;
-            
-            float x_start = island.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.min.x;      
 
-            foreach (var powerline in powerLines.Where(powerline => powerline.show && powerline.ticket.assignee != "unknown" &&
+            float x_start = island.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.min.x;      
+            
+            foreach (var powerline in powerLines.Where(powerline => powerline.show && powerline.ticket.assignee != "unknown" && powerline.ticket.due != null &&
                                                        powerline.ticket.start.Value.Date >= island.DateFrom.Value.Date && powerline.ticket.start.Value.Date <= island.DateTo.Value.Date))
             {
-                powerlinePrefab.transform.position = new Vector3(x_start, y_line, z_start);
-                switch (powerline.ticket.type)
-                {
-                    case "Task":
-                        color = Color.HSVToRGB(0.2f, 0.1f, 1);
-                        break;
-                    case "Bug":
-                        color = Color.HSVToRGB(1, 0.1f, 1);
-                        break;
-                    case "Feature":
-                        color = Color.HSVToRGB(0.65f, 0.1f, 1);
-                        break;
-                    case "Enhancement":
-                        color = Color.HSVToRGB(0.65f, 0.1f, 1);
-                        break;
-                    default:
-                        color = Color.HSVToRGB(0.8f, 0.1f, 1);
-                        break;
-                }              
-
-                var lineRenderer = powerlinePrefab.transform.GetChild(0).GetComponent<LineRenderer>();
-                lineRenderer.SetPosition(0, new Vector3(x_start, y_line, z_start));
-                
-                if (powerline.ticket.due == null)
-                    continue;
                 var endIsland = islands.FirstOrDefault(island => island.dates.Contains(powerline.ticket.due.Value));
                 if (endIsland == null)
                     endIsland = lastIsland;
                 x_end = endIsland.islandInstance.gameObject.transform.GetChild(0).GetComponent<Renderer>().bounds.max.x;
-                lineRenderer.SetPosition(1, new Vector3(x_end, y_line, z_start));
+
+                //find the first empty position for the powerline
+                for(int i=0; i< positions.Count; i++)
+                {
+                    if(positions[i].posX < x_start && positions[i].posX < x_end)
+                    {
+                        posY = positions[i].posY;
+                        lineRenderer.SetPosition(0, new Vector3(x_start, posY, z_start));
+                        lineRenderer.SetPosition(1, new Vector3(x_end, posY, z_start));
+                        positions[i] = (x_end, posY);
+                        break;
+                    }
+                }
 
                 var powerLineInstance = Instantiate(powerlinePrefab);
-                powerLineInstance.transform.GetChild(0).GetComponent<Renderer>().material.color = color;
+                powerLineInstance.transform.GetChild(0).GetComponent<Renderer>().material.color = PowerLineColor(powerline.ticket.type);
                 var powerLineManager = powerLineInstance.transform.GetChild(0).GetComponent<PowerLineManager>();
                 powerLineManager.setTicket(powerline.ticket);
-
-                y_line += 0.35f;
             }
         }
     }
@@ -226,8 +217,30 @@ public class BuildManager : MonoBehaviour
         var overviewCamera = GameObject.Find("OverviewCamera");
 
         overviewCamera.transform.position = new Vector3(20 * islandCount/2, overviewCamera.transform.position.y, overviewCamera.transform.position.z);
+    }
 
-
+    public Color PowerLineColor(string type)
+    {
+        Color color;
+        switch (type)
+        {
+            case "Task":
+                color = Color.HSVToRGB(0.2f, 0.1f, 1);
+                break;
+            case "Bug":
+                color = Color.HSVToRGB(1, 0.1f, 1);
+                break;
+            case "Feature":
+                color = Color.HSVToRGB(0.65f, 0.1f, 1);
+                break;
+            case "Enhancement":
+                color = Color.HSVToRGB(0.65f, 0.1f, 1);
+                break;
+            default:
+                color = Color.HSVToRGB(0.8f, 0.1f, 1);
+                break;
+        }
+        return color;
     }
 
 }

@@ -24,10 +24,6 @@ public class PersonManager : MonoBehaviour
         ClearPanels();
         HighlightPerson(building.name, building.id);
         HighightTickets(building);
-
-
-
-
     }
 
     public void SetBuilding(Building building)
@@ -92,7 +88,7 @@ public class PersonManager : MonoBehaviour
 
         foreach (var ticket in tickets)
         {
-            textTemplate.GetComponent<Text>().text = ticket.name + "  cas : " + ticket.spent;
+            textTemplate.GetComponent<Text>().text = "[" + ticket.type + "] " + ticket.name + "  cas : " + ticket.spent;
             Instantiate(textTemplate, TicketsContent);
         }
         textTemplate.SetActive(false);
