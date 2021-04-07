@@ -17,7 +17,7 @@ public class BuildManager : MonoBehaviour
     public List<Island> islands = new List<Island>();
     public bool showAll;
 
-    public void CreateIslands(List<DateTime> dates, int range, bool showAll)
+    public int CreateIslands(List<DateTime> dates, int range, bool showAll)
     {
         this.showAll = showAll;
         islandPrefab = (GameObject)Resources.Load("Prefabs/IslandPrefab", typeof(GameObject));
@@ -26,6 +26,7 @@ public class BuildManager : MonoBehaviour
         float x = 0;
         float y = 0;
         float z = 0;
+        var position = 0;
         DateTime StartDate = dates[0];
         bool AddIsland;
         short index = 0;
@@ -65,6 +66,7 @@ public class BuildManager : MonoBehaviour
                         island.AddDate(date);
                         AddIsland = false;
                         island.show = true;
+                        island.position = position++;
                     }
                     else
                     {
@@ -74,8 +76,7 @@ public class BuildManager : MonoBehaviour
             }
         }
 
-        SetOverviewCamera(islands.Where(island => island.show).Count());       
-
+        return islands.Where(island => island.show).Count();
     }
 
     public void RenderBuildings()
@@ -229,13 +230,6 @@ public class BuildManager : MonoBehaviour
                 powerLineManager.setTicket(powerline.ticket);
             }
         }
-    }
-
-    public void SetOverviewCamera(int islandCount)
-    {
-        var overviewCamera = GameObject.Find("OverviewCamera");
-
-        overviewCamera.transform.position = new Vector3(20 * islandCount/2, overviewCamera.transform.position.y, overviewCamera.transform.position.z);
     }
 
     public Color PowerLineColor(string type)

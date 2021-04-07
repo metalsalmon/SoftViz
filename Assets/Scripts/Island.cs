@@ -6,6 +6,7 @@ using UnityEngine;
 public class Island
 {
     public short index;
+    public int position;
     public float positionX;
     public GameObject islandInstance;
     public DateTime? DateFrom;

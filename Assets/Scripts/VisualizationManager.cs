@@ -14,6 +14,8 @@ public class VisualizationManager : MonoBehaviour
     int range = 7;
     bool ShowAllIslands = false, showCommits = true, showChanges = true, showCommitedFiles = true;
     string dataset = "aswi2017vana";
+    [SerializeField]
+    public UnityEngine.UI.Slider slider;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +34,7 @@ public class VisualizationManager : MonoBehaviour
     {
         ClearPanels();
         ClearObjects();
-        buildManager.CreateIslands(jsonReader.allDates, range, ShowAllIslands);
+        slider.maxValue = buildManager.CreateIslands(jsonReader.allDates, range, ShowAllIslands) - 1;
 
         buildManager.CreateBuildings(jsonReader.authors, jsonReader.allDates, showCommits, showChanges, showCommitedFiles);
         buildManager.RenderBuildings();
@@ -57,11 +59,17 @@ public class VisualizationManager : MonoBehaviour
     public void ChangeCameraPosition()
     {
         var camera = GameObject.Find("MainCamera");
-        var dateFrom = buildManager.islands.FirstOrDefault(island => island.positionX == camera.transform.position.x).dates[0].Date;
-        Build();
-        var xPos = buildManager.islands.FirstOrDefault(island => island.dates.Contains(dateFrom)).positionX;
-        camera.transform.position = new Vector3(xPos, camera.transform.position.y, camera.transform.position.z);
+        if(buildManager.islands.FirstOrDefault(island => island.positionX == camera.transform.position.x).dates.Count != 0)
+        {
+            var dateFrom = buildManager.islands.FirstOrDefault(island => island.positionX == camera.transform.position.x).dates[0].Date;
 
+            Build();
+            var island = buildManager.islands.FirstOrDefault(island => island.dates.Contains(dateFrom));
+
+            var xPos = island.positionX;
+            slider.value = island.position;
+            camera.transform.position = new Vector3(xPos, camera.transform.position.y, camera.transform.position.z);
+        }
     }
 
     public void ShowAllDates(bool value)
@@ -109,17 +117,37 @@ public class VisualizationManager : MonoBehaviour
     {
         LoadDataset(dropdown.options[dropdown.value].text);
         var camera = GameObject.Find("MainCamera");
+        var overviewCamera = GameObject.Find("OverviewCamera");
         var IslandIndex = buildManager.islands.FirstOrDefault(island => island.positionX == camera.transform.position.x).index;
         Build();
         var island = buildManager.islands.FirstOrDefault(island => island.index == IslandIndex);
-        var xPos = island == null ? 0 : island.positionX;
-        camera.transform.position = new Vector3(xPos, camera.transform.position.y, camera.transform.position.z);
+        if(island == null)
+        {
+            camera.transform.position = new Vector3(0, camera.transform.position.y, camera.transform.position.z);
+            overviewCamera.transform.position = new Vector3(0, overviewCamera.transform.position.y, overviewCamera.transform.position.z);
+            slider.value = 0;
+        }
+        else
+        {
+            camera.transform.position = new Vector3(island.positionX, camera.transform.position.y, camera.transform.position.z);
+            overviewCamera.transform.position = new Vector3(island.positionX, overviewCamera.transform.position.y, overviewCamera.transform.position.z);
+            slider.value = island.position;
+
+        }    
+
     }
 
     public void LoadDataset(string dataset)
     {
         jsonReader = new JsonReader();
         jsonReader.LoadData(dataset);
+    }
+    public void SetOverviewCamera(int islandCount)
+    {
+        var overviewCamera = GameObject.Find("OverviewCamera");
+        var mainCamera = GameObject.Find("MainCamera");
+
+        overviewCamera.transform.position = new Vector3(mainCamera.transform.position.x, overviewCamera.transform.position.y, overviewCamera.transform.position.z);
     }
 
     public void ClearPanels()

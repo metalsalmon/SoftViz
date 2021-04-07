@@ -25,7 +25,7 @@ public class ChangesManager : MonoBehaviour
         personManager.HighightTickets(building);
 
         foreach (var change in building.changes)
-            Debug.Log(change.changes + "   :::  " + change.created);
+            Debug.Log(change.created + " ::: " + change.changes + "   :::  " + change.created);
 
         GameObject.Find("WorkLabel").GetComponent<Text>().text = "Manazment";
 
