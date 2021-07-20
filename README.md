@@ -1,5 +1,7 @@
 # Vizualizácia vývoja softvéru
 
+Unity project - software development visualization. <br/>
+
 Cieľom je vizualizovať dáta z manažmentu a procesu vývoja softvérových projektov,
 pričom snaha je vizualizovať:<br/>
 ● evidenciu úloh vrátane k nim prislúchajúcich artefaktov<br/>
