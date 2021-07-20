@@ -1,8 +1,8 @@
 # Vizualizácia vývoja softvéru
 
 Cieľom je vizualizovať dáta z manažmentu a procesu vývoja softvérových projektov,
-pričom snaha je vizualizovať:
-● evidenciu úloh vrátane k nim prislúchajúcich artefaktov
+pričom snaha je vizualizovať:<br/>
+● evidenciu úloh vrátane k nim prislúchajúcich artefaktov<br/>
 ● vzťahy autorov a commit-ov a časový vývoj práce na projekte
 
 Problémy, ktoré chce zákazník vizuálnou analýzou
