@@ -4,17 +4,7 @@ Cieľom je vizualizovať dáta z manažmentu a procesu vývoja softvérových pr
 pričom snaha je vizualizovať:<br/>
 ● evidenciu úloh vrátane k nim prislúchajúcich artefaktov<br/>
 ● vzťahy autorov a commit-ov a časový vývoj práce na projekte
+● práce na projekte v čase
+● porovnať viacero projektov
 
-Problémy, ktoré chce zákazník vizuálnou analýzou
-vyriešiť
-1. Chce vizuálne preskúmať rozloženie úloh v čase vzhľadom na typ úloh a
-identifikovať problematické miesta v procese realizácie úloh.
-2. Chce analyzovať vzťahy medzi členmi tímu a úlohami a zistiť, ako efektívne
-členovia vypracovali pridelené úlohy.
-3. Chce vizuálne preskúmať konkrétne časové intervaly aby rozpoznal
-opakujúce sa vzory správania počas vývoja (vid. poznámka nižšie)
-4. Chce detailne porovnať priebeh práce naprieč viacerými projektami a nájsť
-zaujímavé spoločné-odlišné črty.
-5. Chce vizuálne porovnať výkon členov tímu, nájsť najvýkonnejšieho a
-najmenej výkonného člena tímu.
-
+datasety: https://github.com/ReliSA/IMiGEr/tree/master/examples/SPADe%20json
